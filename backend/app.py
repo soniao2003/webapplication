@@ -36,7 +36,7 @@ class Comment(db.Model):
       creationDate = db.Column(db.DateTime, default = datetime.now)
       isDeleted = db.Column(db.Boolean, default=False)
       creatorUserId = db.Column(db.String(255))
-
+    
 class Category(db.Model):
       id = db.Column(db.Integer, primary_key=True)
       name = db.Column(db.String(100))
@@ -102,6 +102,15 @@ def update_product(id):
 
       db.session.commit()
       return product_schema.jsonify(product)
+
+@app.route('/delete/<id>/', methods = ['DELETE'])
+def delete_product(id):
+     product = Product.query.get(id)
+     db.session.delete(product)
+     db.session.commit()
+
+     return product_schema.jsonify(product)
+
 
 if __name__ == "__main__":
     # Utwórz kontekst aplikacji przed utworzeniem bazy danych
